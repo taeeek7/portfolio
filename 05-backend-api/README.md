@@ -131,6 +131,8 @@ HTTP Request / Slack Event
 
 **프롬프트 관리:** `/prompt/assignment_v4.txt`로 버전 관리
 
+> ⚠️ 정직한 주석: task-keeper의 이 배정 기능은 **LLM 프롬프트 기반 프로토타입**(단독 저작)이다. 프로덕션에서 운영되는 정식 배정 최적화 엔진은 이후 팀에서 별도로 설계·구축했고, 본인의 역할은 이 프로토타입 검증 + 배정 결과의 측정·분석 쪽이다.
+
 ### 2. 외부 AI 서비스 연동 (data-api)
 
 **문제:** AI 최적화 모델 실행 시 긴 응답 시간
@@ -195,9 +197,10 @@ else:
 
 **문제:** 청소 전/후 사진 업로드를 위한 안전한 URL 필요
 **해결:**
-- NCloud Object Storage Presigned URL 생성
-- boto3 기반 S3 호환 API
-- CS(고객 세그먼트)별 이미지 추적
+- NCloud Object Storage Presigned URL 생성 (S3 호환 → boto3 그대로 활용)
+- 업로드/조회용 URL 분리 발급, 만료 시간 설정
+- 키별 부분 실패 처리 (한 건 실패가 배치 전체를 막지 않음)
+- 세탁 CS(클레임)별 이미지 URL 추적
 
 ---
 
