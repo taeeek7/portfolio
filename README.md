@@ -1,12 +1,13 @@
 # Portfolio - 숙박/청소 운영 플랫폼 엔지니어링
 
-> 14개 프로젝트를 10개 도메인으로 분류한 기술 포트폴리오
+> 17개 도메인으로 정리한 기술 포트폴리오
 
 ---
 
 ## 프로젝트 개요
 
 숙박/청소 운영 관리 플랫폼(Keeper)의 **백엔드, 데이터 파이프라인, 인프라, 챗봇, 프론트엔드**를 설계하고 구축한 프로젝트 모음입니다.
+2026년부터는 **AI 에이전트·프로토타이핑 기반의 기획 워크플로우**로 역할을 확장했습니다.
 
 ---
 
@@ -22,18 +23,42 @@
 | 06 | [Admin Console](./06-admin-console/) | keeper-console, connect-admin | YAML 선언형 어드민 대시보드 | SelectFromUser, YAML, MySQL |
 | 07 | [Scrumble](./07-scrumble/) | scrumble | 대화형 데일리 스크럼 자동화 | FastAPI, Slack Bolt, APScheduler |
 | 08 | [Work Scheduler](./08-work-scheduler/) | work-scheduler | 키퍼 주간 일정 등록 웹앱 | Vanilla JS, Netlify |
-| 09 | [Text-to-SQL](./09-text-to-sql/) | task-keeper (feature branch) | 자연어 → SQL 질의 시스템 | LangChain, ChromaDB, Gemini, FastAPI |
+| 09 | [Text-to-SQL](./09-text-to-sql/) | task-keeper (feature branch) | 자연어 → SQL 질의 시스템 *(학습용 실험)* | LangChain, ChromaDB, Gemini, FastAPI |
 | 10 | [UX & i18n](./10-ux-i18n/) | 키퍼 서비스 전체 | UX 라이팅 250+ 개선 + 10,000+ 문자열 다국어 자동화 | Lokalise, Python, CLI Automation |
+| 11 | [Keeper Agent](./11-keeper-agent/) | keeper-agent | 사내 지식을 MCP로 통합 조회하는 AI 에이전트 | MCP, FastAPI, Claude, Python 3.13 |
+| 12 | [Keeper Prototype](./12-keeper-prototype/) | keeper-prototype | AI 기반 기획-프로토타이핑 사이클 | React 19, TypeScript, Vite, shadcn/ui |
+| 13 | [AI Agent Platform](./13-ai-agent-platform/) | .claude/{agents,skills,mcp-servers} | 반복업무 위임 에이전트 생태계 (16 에이전트 + 21 스킬) | Claude Code, MCP, Python |
+| 14 | [Log Lakehouse](./14-log-lakehouse/) | kafka, kube-airflow | 일 300만 건 로그 장기보관·분석 파이프라인 | Kafka, Airflow, GCS, Parquet, BigQuery |
+| 15 | [n8n Automation](./15-n8n-automation/) | integrations/n8n | 로우코드 운영 워크플로우 자동화 (live/test 이중화) | n8n, Webhook, Google Sheets, Slack |
+| 16 | [Channel Talk](./16-channel-talk/) | integrations/channel-talk | CS 문의 태그 기반 자동 라우팅 | AWS Lambda, DynamoDB, Slack API |
+| 17 | [Analytics](./17-analytics/) | integrations/{google-analytics,redash} | 가설 기반 GA4 이벤트 설계 + 전사 대시보드 | GA4, BigQuery, Redash, Python |
+
+---
+
+## 역할 변화
+
+```
+2023 ─────────────── 2025 ─────────────── 2026 ───────▶
+운영 자동화        데이터 엔지니어링       AI · 프로덕트 기획
+(02,07,08)      (01,03,04,05,14)       (11,12,13,17)
+```
+
+| 시기 | 중심 역할 | 대표 프로젝트 |
+|------|-----------|---------------|
+| **2023~2024** | 운영 자동화 | Slack 봇 3종, 스크럼 봇, 운영 백오피스 |
+| **2024~2025** | 데이터 엔지니어링 | Airflow 파이프라인, Kafka CDC, GitOps 인프라, 로그 Lakehouse |
+| **2026~** | AI · 프로덕트 기획 | Keeper Agent, Prototype 사이클, 에이전트 생태계, 애널리틱스 |
 
 ---
 
 ## 기술 스택 전체 맵
 
 ### Languages & Frameworks
-- **Python** 3.12~3.13 (FastAPI, Slack Bolt, Airflow DAGs)
+- **Python** 3.12~3.13 (FastAPI, Slack Bolt, Airflow DAGs, MCP)
 - **Kotlin** 1.9 (Spring Boot 3.3, JDK 21)
+- **TypeScript** 5.9 + **React** 19 (Vite, shadcn/ui, Tailwind v4)
 - **JavaScript** ES6 (Vanilla, YAML 내장 로직)
-- **YAML** (Helm Charts, Admin Console Config, CI/CD)
+- **YAML** (Helm Charts, Admin Console Config, CI/CD, 정책 정의)
 
 ### Data & Messaging
 - **Apache Airflow** 2.9.3 (CeleryExecutor, 117 DAGs)
@@ -56,11 +81,13 @@
 - **AWS** (RDS, SQS, S3)
 
 ### AI/ML
-- **Google Gemini** 2.0-flash / 2.5-pro (Text-to-SQL, 태스크 배정 최적화)
-- **LangChain** 1.1 + **ChromaDB** (RAG 기반 자연어 질의)
-- **HuggingFace** Embeddings (다국어 시맨틱 검색)
+- **MCP** (Model Context Protocol) — 사내 지식 에이전트 서버 구축·운영
+- **Claude** (anthropic SDK, Claude Code 에이전트·스킬 설계)
+- **Google Gemini** 2.0-flash / 2.5-pro (Text-to-SQL, 태스크 배정 최적화, intent routing)
+- **LangChain** 1.1 + **ChromaDB** / **Qdrant** + **TEI** (RAG 기반 자연어 질의)
+- **HuggingFace** Embeddings (`multilingual-e5`, 다국어 시맨틱 검색)
 - **OpenAI API** (이미지 검수, 클레임 분석)
-- **Dalpha AI** (배정 최적화 모델)
+- **Figma MCP** (디자인 → 다국어 키 자동 생성)
 
 ### Communication & Monitoring
 - **Slack SDK/Bolt** (Socket Mode 봇 4개 운영)
@@ -91,6 +118,17 @@ Code Push → GitHub Actions → Docker Build → NCloud NCR
     → ArgoCD Sync → K8s Rolling Update → Self-Heal
 ```
 
+### AI 기획 사이클 (2026~)
+```
+사내 지식 (API 스펙 / DB 스키마 / 정책 / 화면 IA)
+    ↓ GitHub Actions 자동 현행화
+Keeper Agent (MCP 서버) ──▶ Claude Code / Desktop
+    ↓ 도메인 파악
+기획 초안 (spec.md) ──▶ Keeper Prototype (동작하는 화면 + 정책서 split panel)
+    ↓ 이해관계자 조기 검증
+개발 착수 ──▶ GA4 이벤트로 가설 검증
+```
+
 ### Slack 봇 요청 흐름
 ```
 User @mention → 2-Stage Modal → Reflection 기반 동적 폼
@@ -108,3 +146,6 @@ User @mention → 2-Stage Modal → Reflection 기반 동적 폼
 4. **Secret Management** - SOPS + Age로 시크릿을 암호화하여 Git 추적 가능
 5. **Multi-Environment** - live/test/staging 환경 분리, 동일 코드베이스
 6. **Observability** - Slack 알림, Whatap APM, Airflow 실패 모니터링
+7. **안전한 실패** - 폴백을 기본값으로. 자동화의 실패 모드가 "누락"이 아니라 "덜 정확한 처리"가 되게 설계
+8. **권한 경계 우선** - AI 에이전트는 할 수 있는 것보다 **못 하게 할 것**을 먼저 정의 (advisor는 read-only)
+9. **결정의 근거를 남긴다** - 아키텍처 선택뿐 아니라 **폐기한 결정과 그 이유**까지 기록
